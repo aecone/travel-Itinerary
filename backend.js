@@ -13,10 +13,6 @@ const openai = new OpenAI(process.env.OPENAI_KEY);
 app.use(bodyParser.json());
 app.use(cors());
 
-app.get("/", (req, res) => {
-	res.send("Hello World");
-});
-
 app.post("/api/search", async (req, res) => {
 	try {
 		const { queryString, numResults = 5 } = req.body;
@@ -96,25 +92,6 @@ app.post("/api/crawl", async (req, res) => {
 
 		console.log(completion.choices[0].message.content);
 		res.json(completion.choices[0].message.content);
-	} catch (err) {
-		console.error(err);
-		res.status(500).send("Internal Server Error");
-	}
-});
-
-app.get("/api/gpt", async (req, res) => {
-	try {
-		const completion = await openai.chat.completions.create({
-			messages: [
-				{ role: "system", content: "Hello, how are you?" },
-				{ role: "user", content: "what is the moon like?" },
-			],
-			model: "gpt-3.5-turbo",
-		});
-
-		console.log(completion.choices);
-		console.log(completion.choices[0].message.content);
-		res.json(completion.choices);
 	} catch (err) {
 		console.error(err);
 		res.status(500).send("Internal Server Error");
